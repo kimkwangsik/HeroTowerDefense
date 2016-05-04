@@ -156,3 +156,6 @@ tests/cpp-tests/Resources/audio
 cocos2d/
 proj.*/
 .cocos-project.json
+*.meta
+*/Org/
+Resources/Images/Tower/*/*/Org/
