@@ -40,37 +40,17 @@
     <property name="Via" value="via1"/>
    </properties>
   </object>
-  <object id="7" name="via2" x="832" y="256">
-   <properties>
-    <property name="Via" value="via2"/>
-   </properties>
-  </object>
-  <object id="8" name="via4" x="576" y="512">
-   <properties>
-    <property name="Via" value="via4"/>
-   </properties>
-  </object>
-  <object id="9" name="via3" x="576" y="256">
+  <object id="9" name="via2" x="576" y="256">
    <properties>
     <property name="Via" value="via3"/>
    </properties>
   </object>
-  <object id="10" name="via5" x="320" y="512">
+  <object id="10" name="via3" x="320" y="512">
    <properties>
     <property name="Via" value="via5"/>
    </properties>
   </object>
-  <object id="11" name="via6" x="320" y="320">
-   <properties>
-    <property name="Via" value="via6"/>
-   </properties>
-  </object>
-  <object id="12" name="via7" x="192" y="320">
-   <properties>
-    <property name="Via" value="via7"/>
-   </properties>
-  </object>
-  <object id="13" name="via8" x="192" y="448">
+  <object id="13" name="via4" x="192" y="448">
    <properties>
     <property name="Via" value="via8"/>
    </properties>
