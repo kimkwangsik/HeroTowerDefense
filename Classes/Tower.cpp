@@ -66,7 +66,10 @@ void Tower::setpGold(int * _pnowStageGold)
 	nowStageGold = _pnowStageGold;
 }
 
-
+void Tower::setpMasicGauge(int * _pMasicGauge)
+{
+	nowMasicGauge = _pMasicGauge;
+}
 
 void Tower::onEnter()
 {
@@ -174,6 +177,7 @@ void Tower::towerTick(float a)
 				if ((*_pMonster).at(i)->hp <= 0)
 				{
 					(*nowStageGold) = (*nowStageGold) + obj->dropGold;
+					(*nowMasicGauge) = (*nowMasicGauge) + 5;
 					(*_pMonster).eraseObject(obj);
 				}
 
@@ -199,6 +203,7 @@ void Tower::towerTick(float a)
 				if ((*_pMonster).at(i)->hp <= 0)
 				{
 					(*nowStageGold) = (*nowStageGold) + obj->dropGold;
+					(*nowMasicGauge) = (*nowMasicGauge) + 5;
 					(*_pMonster).eraseObject(obj);
 				}
 				setFlippedX(false);
@@ -223,6 +228,7 @@ void Tower::towerTick(float a)
 				if ((*_pMonster).at(i)->hp <= 0)
 				{
 					(*nowStageGold) = (*nowStageGold) + obj->dropGold;
+					(*nowMasicGauge) = (*nowMasicGauge) + 5;
 					(*_pMonster).eraseObject(obj);
 				}
 

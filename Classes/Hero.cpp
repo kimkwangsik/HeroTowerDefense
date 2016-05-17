@@ -22,7 +22,10 @@ void Hero::setHeroSetting()
 	if (_heroType == 1)
 	{
 		_attackDelay = 0.5f;
-		_attackPower = 25.0f;
+		int level = UserDefault::getInstance()->getIntegerForKey("Hero1_Level");
+		_attackPower = 25.0f + level * 2;
+
+		log("%d , %f", level, _attackPower);
 		setTexture("Images/Hero/Paladin/Walking/Horizontal_1.png");
 		setScale(1.5f);
 		sprintf(name, "Paladin");
@@ -57,6 +60,11 @@ void Hero::setpMonster(Vector<Monster*> *_repMonster)
 void Hero::setpGold(int * _pnowStageGold)
 {
 	nowStageGold = _pnowStageGold;
+}
+
+void Hero::setpMasicGauge(int *_pmasicGauge)
+{
+	nowMasicGauge = _pmasicGauge;
 }
 
 void Hero::onEnter()
@@ -143,6 +151,7 @@ void Hero::heroTick(float a)
 				if ((*_pMonster).at(i)->hp <= 0)
 				{
 					(*nowStageGold) = (*nowStageGold) + obj->dropGold;
+					(*nowMasicGauge) = (*nowMasicGauge) + 5;
 					(*_pMonster).eraseObject(obj);
 				}
 

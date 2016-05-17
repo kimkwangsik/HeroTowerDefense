@@ -41,9 +41,11 @@ bool IntroScene::init()
 	bool start_First = UserDefault::getInstance()->getBoolForKey("Start_First");
 	if (start_First)
 	{
-
+		UserDefault::getInstance()->setIntegerForKey("Hero1_Level", 0);
+		UserDefault::getInstance()->setBoolForKey("Hero1", false);
+		UserDefault::getInstance()->setIntegerForKey("have_gold", 300);
 	}
-	else
+	else //최초 실행시
 	{
 		UserDefault::getInstance()->setBoolForKey("Start_First", true);
 		UserDefault::getInstance()->setIntegerForKey("have_gold", 100);

@@ -24,7 +24,7 @@ GameStageScene::GameStageScene(int stagelevel)
 
 	nowStageGold = 30;
 	_pnowStageGold = &nowStageGold;
-
+	_pmasicGauge = &masicGaugeNum;
 	skipTrue = true;
 	firstHero = false;
 
@@ -226,6 +226,20 @@ void GameStageScene::createStage(int stagelevel)
 
 }
 
+void GameStageScene::getOption(bool gold, bool masic)
+{
+	if (gold)
+	{
+		nowStageGold = nowStageGold + 30;
+	}
+	if(masic)
+	{
+		log("충전");
+		masicGaugeNum = 100;
+	}
+
+}
+
 Sequence* GameStageScene::SequenceMonsterAdd(int num, int max)
 {
 	if (num == max)
@@ -289,7 +303,7 @@ void GameStageScene::addMonster(int monNum)
 		monster->boss = true;
 		monster->dropGold = 0;
 	}
-
+	
 	monster->setAnchorPoint(Vec2(0.5, 0));
 	monster->setPosition(startVec2);
 	auto speed = Speed::create(MoveAction(monster), 1.0f);
@@ -424,6 +438,7 @@ void GameStageScene::myTick(float f)
 		gauge = gauge - 2;
 	}
 	gaugeBar->setPercentage(gauge);
+	masicGaugeBar->setPercentage(masicGaugeNum);
 	//this->SpriteProgressToRadial(gauge);
 	if (gauge < 0 && phaseLevel < 5)
 	{
@@ -446,6 +461,7 @@ void GameStageScene::myTick(float f)
 
 void GameStageScene::bossTick(float f)
 {
+	masicGaugeBar->setPercentage(masicGaugeNum);
 	if (_monster.size() == 0)
 	{
 		log("clear!!");
@@ -507,7 +523,7 @@ bool GameStageScene::onTouchBegan(Touch* touch, Event* event) {
 		clickTower->setOpacity(100.f);
 		clickTower->setpMonster(_pMonster);
 		clickTower->setpGold(_pnowStageGold);
-
+		clickTower->setpMasicGauge(_pmasicGauge);
 		tmap->addChild(clickTower, 101);
 		return true;
 	}
@@ -580,6 +596,14 @@ void GameStageScene::onTouchEnded(Touch* touch, Event* event)
 			}
 			_masicMonster.clear();
 
+			if (masicGaugeNum > 100)
+			{
+				masicGaugeNum = 100;
+			}
+
+			masicGaugeNum = masicGaugeNum - 80;
+			masicGaugeBar->setPercentage(masicGaugeNum);
+
 		}
 		else if (masicTpye == 2)
 		{
@@ -607,6 +631,14 @@ void GameStageScene::onTouchEnded(Touch* touch, Event* event)
 				_monster.eraseObject(_masicMonster.at(i));
 			}
 			_masicMonster.clear();
+
+			if (masicGaugeNum > 100)
+			{
+				masicGaugeNum = 100;
+			}
+
+			masicGaugeNum = masicGaugeNum - 50;
+			masicGaugeBar->setPercentage(masicGaugeNum);
 		}
 
 
@@ -774,7 +806,6 @@ Vec2 GameStageScene::positionForTileCoord(Vec2 position)
 	return Vec2(x, y);
 }
 
-
 Vec2 GameStageScene::tileCoordForPosition(Vec2 position)
 {
 	int x = position.x / 30;
@@ -809,6 +840,28 @@ void GameStageScene::masicMenuCreate()
 	masicMenu->setPosition(Vec2(0 + origin.x, 0 + origin.y));
 
 	addChild(masicMenu, 2);
+
+
+	masicBase = Sprite::create("Images/bar_base.png");
+	masicBase->setPosition(Vec2(0, 0));
+	masicBase->setAnchorPoint(Vec2(1, 1));
+	masicBase->setScaleX(0.6f);
+	masicBase->setRotation(90.f);
+	masicMenuItem1->addChild(masicBase, 2);
+
+	masicGauge = Sprite::create("Images/bar_gauge.png");
+
+	masicGaugeNum = 0;
+
+	masicGaugeBar = ProgressTimer::create(masicGauge);
+	masicGaugeBar->setType(ProgressTimer::Type::BAR);
+	masicGaugeBar->setMidpoint(Vec2(1, 0));
+	masicGaugeBar->setBarChangeRate(Vec2(1, 0));
+	masicGaugeBar->setPercentage(masicGaugeNum);
+
+	masicGaugeBar->setPosition(Vec2(0, 0));
+	masicGaugeBar->setAnchorPoint(Vec2(0, 0));
+	masicBase->addChild(masicGaugeBar, 3);
 }
 
 void GameStageScene::towerMenuCreate()
@@ -889,6 +942,21 @@ void GameStageScene::heroMenuCreate()
 	heroMenuItem3->setAnchorPoint(Vec2(0, 0));
 	heroMenuItem3->setTag(533);
 
+	bool hero1_have = UserDefault::getInstance()->getBoolForKey("Hero1");
+	bool hero2_have = UserDefault::getInstance()->getBoolForKey("Hero2");
+	bool hero3_have = UserDefault::getInstance()->getBoolForKey("Hero3");
+
+	heroMenuItem1->setOpacity(100.f);
+	heroMenuItem2->setOpacity(100.f);
+	heroMenuItem3->setOpacity(100.f);
+
+	if(hero1_have)
+	heroMenuItem1->setOpacity(255.f);
+	if(hero2_have)
+	heroMenuItem2->setOpacity(255.f);
+	if(hero3_have)
+	heroMenuItem3->setOpacity(255.f);
+
 	auto heroMenu = Menu::create(heroMenuItem1, heroMenuItem2, heroMenuItem3, NULL);
 
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -904,6 +972,9 @@ void GameStageScene::doClick(Ref* pSender)
 {
 	towerTouch = false;
 	masicTouch = false;
+	bool hero1_have = UserDefault::getInstance()->getBoolForKey("Hero1");
+	bool hero2_have = UserDefault::getInstance()->getBoolForKey("Hero2");
+	bool hero3_have = UserDefault::getInstance()->getBoolForKey("Hero3");
 	//타워 설치중이면 메뉴 클릭 불가능
 	for (int i = 0; i != _setupTower.size(); i++)
 	{
@@ -968,12 +1039,10 @@ void GameStageScene::doClick(Ref* pSender)
 		towerTpye = 3;
 		towerTouch = true;
 	}
-	else if (i == 521)
+	else if (i == 521 && masicGaugeNum >= 80)
 	{
 		masicTpye = 1;
 		masicTouch = true;
-
-
 		////번개 마법
 		//for (int i = 0; i < _monster.size(); i++)
 		//{
@@ -985,14 +1054,14 @@ void GameStageScene::doClick(Ref* pSender)
 		//	}
 		//}
 	}
-	else if (i == 522)
+	else if (i == 522 && masicGaugeNum >= 50)
 	{
 		masicTpye = 2;
 		masicTouch = true;
-		nowStageGold = nowStageGold + 50;
+		//nowStageGold = nowStageGold + 50;
 		//얼음
 	}
-	else if (i == 531 && !firstHero)
+	else if (i == 531 && !firstHero && hero1_have)
 	{
 		log("Hero1");
 		hero1 = new Hero(1);
@@ -1000,6 +1069,7 @@ void GameStageScene::doClick(Ref* pSender)
 		hero1->setOpacity(240.f);
 		hero1->setpMonster(_pMonster);
 		hero1->setpGold(_pnowStageGold);
+		hero1->setpMasicGauge(_pmasicGauge);
 
 		tmap->addChild(hero1, 200);
 		firstHero = true;
@@ -1007,11 +1077,11 @@ void GameStageScene::doClick(Ref* pSender)
 		//heroMenuItem1->setNormalImage(Sprite::create("Images/Hero/hero3.png"));
 		//heroMenuItem1->setSelectedImage(Sprite::create("Images/Hero/hero2.png"));
 	}
-	else if (i == 532)
+	else if (i == 532 && hero2_have)
 	{
 		log("Hero2");
 	}
-	else if (i == 533)
+	else if (i == 533 && hero3_have)
 	{
 		log("Hero3");
 	}

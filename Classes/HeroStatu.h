@@ -12,12 +12,20 @@ public:
 
 	CREATE_FUNC(HeroStatu);
 
+	bool myhero1;
+	bool myhero2;
+	bool myhero3;
+	int clickHeroNum;
 
+	cocos2d::LabelTTF* upgrade;
+
+	cocos2d::Sprite* mainSprite;
+	cocos2d::MenuItemImage* pHeroItem1;
+	cocos2d::MenuItemImage* pHeroItem2;
 
 	cocos2d::Size VisibleWinSize;
 
-	cocos2d::TMXTiledMap* tmap;
-	cocos2d::TMXObjectGroup* objects;
+	void doClick(Ref* pSender);
 
 	//virtual void onEnter();
 };

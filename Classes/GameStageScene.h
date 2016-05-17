@@ -13,6 +13,7 @@ public:
 	GameStageScene(int stagelevel);
 
 	void createStage(int level);
+	void getOption(bool gold , bool masic);
 
 	virtual void onEnter();
 	virtual void onExit();
@@ -54,6 +55,12 @@ public:
 	cocos2d::ProgressTimer *gaugeBar;
 	int phaseLevel = 0;
 	cocos2d::LabelTTF* phaseLabel;
+
+	cocos2d::Sprite* masicBase;
+	cocos2d::Sprite* masicGauge;
+	int masicGaugeNum;
+	int *_pmasicGauge;
+	cocos2d::ProgressTimer *masicGaugeBar;
 
 	bool towerTouch = false;
 	bool towerMenustatus = true;
