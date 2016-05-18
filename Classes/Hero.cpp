@@ -30,13 +30,15 @@ void Hero::setHeroSetting()
 		setScale(1.5f);
 		sprintf(name, "Paladin");
 	}
-	//else if (_heroType == 2)
-	//{
-	//	_attackDelay = 1.0f;
-	//	_attackPower = 20.0f;
-	//	setTexture("Images/Tower/Rogue1/Horizontal_3.png");	//Rogue 도적.
-	//	sprintf(name, "Rogue");
-	//}
+	else if (_heroType == 2)
+	{
+		_attackDelay = 1.0f;
+		int level = UserDefault::getInstance()->getIntegerForKey("Hero2_Level");
+		_attackPower = 20.0f + level * 3;
+		setTexture("Images/Tower/Rogue1/Horizontal_3.png");	//Rogue 도적.
+		setScale(1.5f);
+		sprintf(name, "Rogue");
+	}
 	//else if (_heroType == 3)
 	//{
 	//	_attackDelay = 2.0f;
@@ -169,25 +171,27 @@ void Hero::heroTick(float a)
 		}
 
 		
-		/*else if (_heroType == 2) {
+		else if (_heroType == 2) {
 			if (absDis.x <= 75 && absDis.y <= 75)
 			{
+				stopAllActions();
 				(*_pMonster).at(i)->hp -= _attackPower;
 				if ((*_pMonster).at(i)->hp <= 0)
 				{
+					(*nowStageGold) = (*nowStageGold) + obj->dropGold;
+					(*nowMasicGauge) = (*nowMasicGauge) + 5;
 					(*_pMonster).eraseObject(obj);
-					(*nowStageGold)++;
 				}
 
 				char animationStr1[50];
-				sprintf(animationStr1, "Images/Tower/%s%d/Horizontal_%d.png", name, towerUpgradeLevel, 1);
+				sprintf(animationStr1, "Images/Tower/%s1/Horizontal_%d.png", name, 1);
 				char animationStr2[50];
-				sprintf(animationStr2, "Images/Tower/%s%d/Horizontal_%d.png", name, towerUpgradeLevel, 2);
+				sprintf(animationStr2, "Images/Tower/%s1/Horizontal_%d.png", name, 2);
 				char animationStr3[50];
-				sprintf(animationStr3, "Images/Tower/%s%d/Horizontal_%d.png", name, towerUpgradeLevel, 3);
+				sprintf(animationStr3, "Images/Tower/%s1/Horizontal_%d.png", name, 3);
 
 				auto animation = Animation::create();
-				animation->setDelayPerUnit(0.1f);
+				animation->setDelayPerUnit(0.2f);
 
 				animation->addSpriteFrameWithFile(animationStr1);
 				animation->addSpriteFrameWithFile(animationStr2);
@@ -198,7 +202,7 @@ void Hero::heroTick(float a)
 				return;
 			}
 		}
-		else if (_heroType == 3) {
+		/*else if (_heroType == 3) {
 			if (absDis.x <= 75 && absDis.y <= 75)
 			{
 				(*_pMonster).at(i)->hp -= _attackPower;
@@ -276,7 +280,19 @@ void Hero::heroTick(float a)
 		}
 
 		auto animation = Animation::create();
-		animation->setDelayPerUnit(0.1f);
+
+		if (_heroType == 1)
+		{
+			animation->setDelayPerUnit(0.1f);
+		}
+		if (_heroType == 2)
+		{
+			animation->setDelayPerUnit(0.12f);
+			animation->addSpriteFrameWithFile(MoveAnimationStr1);
+			animation->addSpriteFrameWithFile(MoveAnimationStr2);
+			animation->addSpriteFrameWithFile(MoveAnimationStr3);
+			animation->addSpriteFrameWithFile(MoveAnimationStr4);
+		}
 
 		animation->addSpriteFrameWithFile(MoveAnimationStr1);
 		animation->addSpriteFrameWithFile(MoveAnimationStr2);
@@ -288,7 +304,9 @@ void Hero::heroTick(float a)
 	}
 	else
 	{
-		setTexture("Images/Hero/Paladin/Walking/Horizontal_1.png");
+		char def[50];
+		sprintf(def, "Images/Hero/%s/Walking/Horizontal_1.png", name);
+		setTexture(def);
 	}
 	auto moveb = MoveBy::create(disVec/60.f, minDis);
 	runAction(moveb);

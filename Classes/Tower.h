@@ -27,6 +27,10 @@ public:
 
 	void setAnimation(cocos2d::Vec2 absDis, cocos2d::Vec2 dis);
 
+	void attackDeley(float dt);
+	int _attackedMonster;
+	Monster* attackedMonster;
+
 	int towerUpgradeLevel;
 	char name[10];
 	char animationStr1[50];

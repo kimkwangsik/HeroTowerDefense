@@ -22,10 +22,20 @@ public:
 	cocos2d::Sprite* mainSprite;
 	cocos2d::MenuItemImage* pHeroItem1;
 	cocos2d::MenuItemImage* pHeroItem2;
+	cocos2d::MenuItemImage* pHero1;
+	cocos2d::MenuItemImage* pHero2;
 
 	cocos2d::Size VisibleWinSize;
 
+	cocos2d::LayerColor* infoLayer;
+	cocos2d::LabelTTF* infoLabel;
+	bool heroInfoOn;
+
 	void doClick(Ref* pSender);
+
+	void resetHero1Info();
+
+	void resetHero2Info();
 
 	//virtual void onEnter();
 };
