@@ -4,6 +4,7 @@
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
+#define MONSTERCOUNT 10
 
 Scene* GameStageScene::createScene()
 {
@@ -283,7 +284,9 @@ void GameStageScene::addMonster(int pMonNum)
 	}
 	else if (monNum == 2)
 	{
-		monster = new Monster("blueslime");
+		monster = new Monster("bat");
+		monster->animationNum = 4;
+		monster->_fly = true;
 		monster->maxHp = 120.f * infinityHP;
 		monster->dropGold = 1;
 	}
@@ -301,8 +304,9 @@ void GameStageScene::addMonster(int pMonNum)
 	}
 	else if (monNum == 5)
 	{
-		monster = new Monster("minotaur");
+		monster = new Monster("undeadking");
 		monster->maxHp = 200.f * infinityHP;
+		monster->animationNum = 4;
 		monster->dropGold = 2;
 	}
 	else
@@ -447,6 +451,11 @@ void GameStageScene::attackBossMonster(Monster* monster)
 			hero2->stopAllActions();
 			hero2->unscheduleAllSelectors();
 		}
+		if (ThirdHero)
+		{
+			hero3->stopAllActions();
+			hero3->unscheduleAllSelectors();
+		}
 
 		if (towerStop)
 		{
@@ -495,6 +504,11 @@ void GameStageScene::removeMonster(Monster* monster)
 				hero2->stopAllActions();
 				hero2->unscheduleAllSelectors();
 			}
+			if (ThirdHero)
+			{
+				hero3->stopAllActions();
+				hero3->unscheduleAllSelectors();
+			}
 
 			if (towerStop)
 			{
@@ -518,7 +532,6 @@ void GameStageScene::removeMonster(Monster* monster)
 				auto hrartObj = (Sprite*)_heart.at(_heart.size() - 1);
 				hrartObj->removeFromParent();
 				_heart.popBack();
-
 			}
 			if (_heart.size() == 0 && !gameOver)
 			{
@@ -565,7 +578,7 @@ void GameStageScene::myTick(float f)
 		char phase[20];
 		sprintf(phase, "%d phase", phaseLevel - bossPhaseCount);
 		phaseLabel->setString(phase);
-		runAction(SequenceMonsterAdd(0, 10));
+		runAction(SequenceMonsterAdd(0, MONSTERCOUNT));
 	}
 	if (gauge < 0 && 5 == phase)
 	{
@@ -665,11 +678,11 @@ bool GameStageScene::onTouchBegan(Touch* touch, Event* event) {
 	{
 		if (masicTpye == 1)
 		{
-			masicSprite->setTexture("Images/spell/lighting-sky-3.png");
+			masicSprite->setTexture("Images/spell/starsfury.png");
 		}
 		else if (masicTpye == 2)
 		{
-			masicSprite->setTexture("Images/spell/ice-blue-3.png");
+			masicSprite->setTexture("Images/spell/cold.png");
 		}
 		masicSprite->setPosition(tmapConvertPoint);
 		masicSprite->setOpacity(100.f);
@@ -1024,8 +1037,8 @@ Vec2 GameStageScene::tileCoordForPosition(Vec2 position)
 void GameStageScene::masicMenuCreate()
 {
 	auto masicMenuItem1 = MenuItemImage::create(
-		"Images/spell/lighting-sky-2.png",
-		"Images/spell/lighting-sky-2.png",
+		"Images/spell/starsfury.png",
+		"Images/spell/starsfury.png",
 		CC_CALLBACK_1(GameStageScene::doClick, this));
 	masicMenuItem1->setPosition(Vec2(winSize.width, 0));
 	masicMenuItem1->setAnchorPoint(Vec2(1, 0));
@@ -1121,7 +1134,6 @@ void GameStageScene::towerMenuCreate()
 
 void GameStageScene::heroMenuCreate()
 {
-
 	heroMenuItem1 = MenuItemImage::create(
 		"Images/Hero/hero1.png",
 		"Images/Hero/hero1.png",
@@ -1130,7 +1142,6 @@ void GameStageScene::heroMenuCreate()
 	heroMenuItem1->setAnchorPoint(Vec2(0, 0));
 	heroMenuItem1->setTag(531);
 
-
 	heroMenuItem2 = MenuItemImage::create(
 		"Images/Hero/hero2.png",
 		"Images/Hero/hero2.png",
@@ -1138,8 +1149,6 @@ void GameStageScene::heroMenuCreate()
 	heroMenuItem2->setPosition(Vec2(heroMenuItem1->getContentSize().width, 0));
 	heroMenuItem2->setAnchorPoint(Vec2(0, 0));
 	heroMenuItem2->setTag(532);
-
-	
 
 	heroMenuItem3 = MenuItemImage::create(
 		"Images/Hero/hero3.png",

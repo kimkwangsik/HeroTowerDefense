@@ -20,6 +20,9 @@ bool HeroStatu::init()
 	}
 	clickHeroNum = 0;
 
+	touchMenu = false;
+	
+
 	auto pScene = Menus::createScene();
 	auto scenestr = new Menus("HeroStatu");
 	scenestr->autorelease();
@@ -27,6 +30,11 @@ bool HeroStatu::init()
 	this->addChild(pScene, 10);
 
 	VisibleWinSize = Director::getInstance()->getVisibleSize();
+
+	auto MainBackGround = Sprite::create("TileMaps/Main.png");
+	MainBackGround->setPosition(Vec2(VisibleWinSize.width / 2, VisibleWinSize.height / 2));
+	MainBackGround->setAnchorPoint(Vec2(0.5, 0.5));
+	this->addChild(MainBackGround, 0);
 	
 	auto heroMenuSprite = Sprite::create("Images/g43961.png");
 	heroMenuSprite->setPosition(Vec2(VisibleWinSize.width, VisibleWinSize.height / 2));
@@ -163,6 +171,7 @@ void HeroStatu::doClick(Ref * pSender)
 	bool hero3 = UserDefault::getInstance()->getBoolForKey("Hero3");
 	if (i == 411)
 	{
+		touchMenu = true;
 		mainSprite->setTexture("Images/Hero/hero1.png");
 		mainSprite->setVisible(true);
 		infoLayer->setVisible(false);
@@ -170,7 +179,7 @@ void HeroStatu::doClick(Ref * pSender)
 		clickHeroNum = 1;
 		if (hero1)
 		{
-			resetHeroInfo("Hero1", false, 10);
+			resetHeroInfo("Hero1", false, 100);
 		}
 		else
 		{
@@ -180,6 +189,7 @@ void HeroStatu::doClick(Ref * pSender)
 	}
 	else if (i == 412)
 	{
+		touchMenu = true;
 		mainSprite->setTexture("Images/Hero/hero2.png");
 		mainSprite->setVisible(true);
 		infoLayer->setVisible(false);
@@ -187,7 +197,7 @@ void HeroStatu::doClick(Ref * pSender)
 		clickHeroNum = 2;
 		if (hero2)
 		{
-			resetHeroInfo("Hero2", false, 20);
+			resetHeroInfo("Hero2", false, 200);
 		}
 		else
 		{
@@ -197,6 +207,7 @@ void HeroStatu::doClick(Ref * pSender)
 	}
 	else if (i == 413)
 	{
+		touchMenu = true;
 		mainSprite->setTexture("Images/Hero/hero3.png");
 		mainSprite->setVisible(true);
 		infoLayer->setVisible(false);
@@ -204,7 +215,7 @@ void HeroStatu::doClick(Ref * pSender)
 		clickHeroNum = 3;
 		if (hero3)
 		{
-			resetHeroInfo("Hero3", false, 30);
+			resetHeroInfo("Hero3", false, 300);
 		}
 		else
 		{
@@ -212,14 +223,13 @@ void HeroStatu::doClick(Ref * pSender)
 			spriteLevelView->setString("");
 		}
 	}
-	else if (i == 421)
+	else if (i == 421 && touchMenu)
 	{
-		log("정보");
 		if (clickHeroNum == 1)
 		{
 			if (hero1)
 			{
-				resetHeroInfo("Hero1", false, 10);
+				resetHeroInfo("Hero1", false, 100);
 			}
 			else
 			{
@@ -230,7 +240,7 @@ void HeroStatu::doClick(Ref * pSender)
 		{
 			if (hero2)
 			{
-				resetHeroInfo("Hero2", false, 20);
+				resetHeroInfo("Hero2", false, 200);
 			}
 			else
 			{
@@ -241,7 +251,7 @@ void HeroStatu::doClick(Ref * pSender)
 		{
 			if (hero3)
 			{
-				resetHeroInfo("Hero3", false, 30);
+				resetHeroInfo("Hero3", false, 300);
 			}
 			else
 			{
@@ -262,15 +272,15 @@ void HeroStatu::doClick(Ref * pSender)
 			heroInfoOn = true;
 		}
 	}
-	else if (i == 422)
+	else if (i == 422 && touchMenu)
 	{
 		if (clickHeroNum == 1)
 		{
 			if (hero1)
 			{
-				if (gold >= 10)
+				if (gold >= 100)
 				{
-					resetHeroInfo("Hero1", true, 10);
+					resetHeroInfo("Hero1", true, 100);
 				}
 				else
 				{
@@ -280,7 +290,7 @@ void HeroStatu::doClick(Ref * pSender)
 			else if (gold >= 100)
 			{
 				resetHeroInfo("Hero1", true, 100);
-				resetHeroInfo("Hero1", false, 10);
+				resetHeroInfo("Hero1", false, 100);
 			}
 			else
 			{
@@ -292,9 +302,9 @@ void HeroStatu::doClick(Ref * pSender)
 		{
 			if (hero2)
 			{
-				if (gold >= 20)
+				if (gold >= 200)
 				{
-					resetHeroInfo("Hero2", true, 20);
+					resetHeroInfo("Hero2", true, 200);
 				}
 				else
 				{
@@ -304,7 +314,7 @@ void HeroStatu::doClick(Ref * pSender)
 			else if (gold >= 200)
 			{
 				resetHeroInfo("Hero2", true, 200);
-				resetHeroInfo("Hero2", false, 20);
+				resetHeroInfo("Hero2", false, 200);
 			}
 			else
 			{
@@ -315,9 +325,9 @@ void HeroStatu::doClick(Ref * pSender)
 		{
 			if (hero3)
 			{
-				if (gold >= 30)
+				if (gold >= 300)
 				{
-					resetHeroInfo("Hero3", true, 30);
+					resetHeroInfo("Hero3", true, 300);
 				}
 				else
 				{
@@ -327,7 +337,7 @@ void HeroStatu::doClick(Ref * pSender)
 			else if (gold >= 300)
 			{
 				resetHeroInfo("Hero3", true, 300);
-				resetHeroInfo("Hero3", false, 30);
+				resetHeroInfo("Hero3", false, 300);
 			}
 			else
 			{

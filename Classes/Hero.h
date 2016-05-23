@@ -23,12 +23,23 @@ public:
 	void setHeroSetting();
 
 	void heroTick(float a);
+	void magicianMove(float dt);
+	void setDefTexture();
+	void setAnimation(cocos2d::Vec2 absDis, cocos2d::Vec2 dis);
+	void attackDeley(float dt);
 	cocos2d::Vec2 minDis;
 	cocos2d::Vec2 absMaxDis;
 	cocos2d::Vector<Monster*> *_pMonster;
 	Monster* nearMonster;
 	bool near1;
+	cocos2d::Vec2 magicainMoveVec;
 	float _attackPower;
+	Monster* attackedMonsterHero;
+
+
+	char animationStr1[50];
+	char animationStr2[50];
+	char animationStr3[50];
 	
 	void setpGold(int* _pnowStageGold);
 	void setpMasicGauge(int * _pmasicGauge);
