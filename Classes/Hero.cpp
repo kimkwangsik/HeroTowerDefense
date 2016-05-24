@@ -23,6 +23,7 @@ void Hero::setHeroSetting()
 	{
 		_attackDelay = 0.5f;
 		int level = UserDefault::getInstance()->getIntegerForKey("Hero1_Level");
+		_level = level;
 		_attackPower = 25.0f + (level-1) * 2;
 		setTexture("Images/Hero/Knight/Walking/Horizontal_1.png");
 		setScale(1.5f);
@@ -32,6 +33,7 @@ void Hero::setHeroSetting()
 	{
 		_attackDelay = 1.0f;
 		int level = UserDefault::getInstance()->getIntegerForKey("Hero2_Level");
+		_level = level;
 		_attackPower = 20.0f + (level-1) * 3;
 		setTexture("Images/Tower/Rogue1/Horizontal_3.png");	//Rogue 도적.
 		setScale(1.5f);
@@ -41,6 +43,7 @@ void Hero::setHeroSetting()
 	{
 		_attackDelay = 2.0f;
 		int level = UserDefault::getInstance()->getIntegerForKey("Hero3_Level");
+		_level = level;
 		_attackPower = 30.0f + (level-1) * 5;
 		setTexture("Images/Tower/Magician1/Horizontal_3.png");
 		setScale(1.5f);
@@ -107,6 +110,11 @@ void Hero::heroTick(float a)
 		
 
 		Vec2 absDis = Vec2(fabs(dis.x), fabs(dis.y));
+
+		if (obj->getPositionX() > 400.0f)
+		{
+			continue;
+		}
 		if (_heroType == 1 && obj->_fly)
 		{
 			continue;
@@ -229,6 +237,7 @@ void Hero::heroTick(float a)
 				ball->runAction(Sequence::create(MoveBy::create(0.5, dis / 1.5), RemoveSelf::create(), nullptr));
 
 				attackedMonsterHero = obj;
+				splashVec = obj->getPosition();
 				scheduleOnce(schedule_selector(Hero::attackDeley), 0.5f);
 
 				setAnimation(absDis, dis);
@@ -253,8 +262,25 @@ void Hero::heroTick(float a)
 
 	if (_heroType == 3)
 	{
-		if ((*_pMonster).size() != 0)
+		for (int i = 0; i < (*_pMonster).size(); i++)
 		{
+			auto obj = (Monster*)(*_pMonster).at(i);
+
+			if (obj->getPositionX() >= 400.0f)
+			{
+				moveOK = false;
+			}
+			else
+			{
+				moveOK = true;
+				break;
+			}
+		}
+
+		if ((*_pMonster).size() != 0 && moveOK)
+		{
+			
+
 			if (nearMonster->getPositionX() >= 400.f)
 			{
 				return;
@@ -303,8 +329,6 @@ void Hero::heroTick(float a)
 		return;
 		
 	}
-
-	
 
 	char MoveAnimationStr1[50];
 	char MoveAnimationStr2[50];
@@ -379,6 +403,10 @@ void Hero::heroTick(float a)
 			auto obj = (Monster*)(*_pMonster).at(i);
 
 			if (_heroType == 1 && obj->_fly)
+			{
+				moveOK = false;
+			}
+			else if (obj->getPositionX() >= 400.0f)
 			{
 				moveOK = false;
 			}
@@ -475,22 +503,94 @@ void Hero::attackDeley(float dt)
 	{
 		if (obj == (*_pMonster).at(i))
 		{
-			if (_heroType == 3)
+			if (_heroType == 2 && obj->_fly)
 			{
-				if (obj->boss == false)
+				obj->hp -= (_attackPower * (1.20 + ((_level - 1) * 0.05)));
+			}
+			else if (_heroType == 3)
+			{
+				obj->hp -= _attackPower;
+				Vec2 monsterVec2 = obj->getPosition();
+				Vec2 dis = monsterVec2 - getPosition();
+				Vec2 conSize = Vec2((getContentSize().width / 2), (getContentSize().height / 2));
+				//auto draw_node = DrawNode::create();
+				//draw_node->setPosition((dis / 1.5)+ conSize);
+				//draw_node->setScale(0.66);
+				//addChild(draw_node);
+				//draw_node->drawCircle(Vec2(0, 0), 60, CC_DEGREES_TO_RADIANS(90), 50, false, Color4F(0, 1, 1, 1));
+				//draw_node->runAction(Sequence::create(FadeIn::create(1.0f), RemoveSelf::create(), nullptr));
+				auto cache = SpriteFrameCache::getInstance();
+				cache->addSpriteFramesWithFile("Images/Hero/spell/fx_f3_fountainofyouth.plist");
+
+				Vector<SpriteFrame*> animFrames;
+
+				char str[100] = { 0 };
+				for (int i = 5; i < 11; i++)
 				{
-					obj->speed->setSpeed(0.5f);
-					obj->setColor(Color3B::BLUE);
-					obj->speedDown = true;
+					if (i < 10)
+					{
+						sprintf(str, "fx_f3_fountainofyouth_00%d.png", i);
+					}
+					else
+					{
+						sprintf(str, "fx_f3_fountainofyouth_0%d.png", i);
+					}
+					SpriteFrame* frame = cache->getSpriteFrameByName(str);
+					animFrames.pushBack(frame);
+				}
+				/////////////
+				auto pMan = Sprite::createWithSpriteFrameName("fx_f3_fountainofyouth_000.png");
+				pMan->setScale(1.5f);
+				pMan->setPosition((dis / 1.5) + conSize);
+				pMan->setAnchorPoint(Vec2(0.5, 0.5));
+				this->addChild(pMan);
+				
+				auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+				auto animate = Animate::create(animation);
+				auto seq = Sequence::create(animate, RemoveSelf::create(), nullptr);
+				pMan->runAction(seq);
+
+				for (int j = 0; j != (*_pMonster).size(); j++)
+				{
+					auto monsterObj = (Monster*)(*_pMonster).at(j);
+					Vec2 monsterVec2 = monsterObj->getPosition();
+					Vec2 dis = splashVec - monsterVec2;
+
+					Vec2 absDis = Vec2(fabs(dis.x), fabs(dis.y));
+					if (absDis.x <= 60 && absDis.y <= 60)
+					{
+						monsterObj->hp -= (_attackPower * (0.50 + ((_level - 1) * 0.05)));
+						if (monsterObj->hp <= 0)
+						{
+							_masicMonster.pushBack(monsterObj);
+						}
+						if (monsterObj->boss == false)
+						{
+							monsterObj->speed->setSpeed(0.5f);
+							monsterObj->setColor(Color3B::BLUE);
+							monsterObj->speedDown = true;
+						}
+					}
 				}
 			}
-			obj->hp -= _attackPower;
+			else
+			{
+				obj->hp -= _attackPower;
+			}
+
 			if (obj->hp <= 0)
 			{
 				(*nowStageGold) = (*nowStageGold) + obj->dropGold;
 				(*nowMasicGauge) = (*nowMasicGauge) + 5;
-				(*_pMonster).eraseObject(obj);
+				_masicMonster.pushBack(obj);
+				//(*_pMonster).eraseObject(obj);
 			}
+
+			for (int i = 0; i != _masicMonster.size(); i++)
+			{
+				(*_pMonster).eraseObject(_masicMonster.at(i));
+			}
+			_masicMonster.clear();
 		}
 	}
 }

@@ -349,7 +349,15 @@ void Tower::attackDeley(float dt)
 					obj->speedDown = true;
 				}
 			}
-			obj->hp -= _attackPower;
+			if (_towerType == 2 && obj->_fly)
+			{
+				obj->hp -= (_attackPower * 1.5f);
+			}
+			else
+			{
+				obj->hp -= _attackPower;
+			}
+			
 			if (obj->hp <= 0)
 			{
 				(*nowStageGold) = (*nowStageGold) + obj->dropGold;

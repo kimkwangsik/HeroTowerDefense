@@ -37,15 +37,18 @@ public:
 	Monster* attackedMonsterHero;
 
 
-	char animationStr1[50];
-	char animationStr2[50];
-	char animationStr3[50];
+	char animationStr1[100];
+	char animationStr2[100];
+	char animationStr3[100];
 	
 	void setpGold(int* _pnowStageGold);
 	void setpMasicGauge(int * _pmasicGauge);
 	int *nowStageGold;
 	int *nowMasicGauge;
 
+
+	cocos2d::Vec2 splashVec;
+	cocos2d::Vector<Monster*> _masicMonster;
 
 	//int towerUpgradeLevel;
 	//cocos2d::Sprite* b_Yes;
@@ -64,6 +67,7 @@ private:
 	int _heroType;
 	bool _setupBegan;
 	float _attackDelay;
+	int _level;
 };
 
 #endif //defined(__SpriteExtendEx__Monster__)//

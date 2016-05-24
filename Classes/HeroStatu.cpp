@@ -244,7 +244,7 @@ void HeroStatu::doClick(Ref * pSender)
 			}
 			else
 			{
-				infoLabel->setString("Level 1\n공격력 20\n스킬\n대공 전문\n1.05 배\n비행 몬스터에게\n데미지 증가");
+				infoLabel->setString("Level 1\n공격력 20\n스킬\n대공 전문\n1.2 배\n비행 몬스터에게\n데미지 증가");
 			}
 		}
 		else if (clickHeroNum == 3)
@@ -255,7 +255,7 @@ void HeroStatu::doClick(Ref * pSender)
 			}
 			else
 			{
-				infoLabel->setString("Level 1\n공격력 30\n스킬\n스플래시 데미지\n0.20 배\n주변 몬스터에게\n스플래시 데미지");
+				infoLabel->setString("Level 1\n공격력 30\n스킬\n스플래시 데미지\n0.50 배\n주변 몬스터에게\n스플래시 데미지");
 			}
 		}
 
@@ -416,8 +416,8 @@ void HeroStatu::resetHeroInfo(std::string name, bool upgradeinfo, int cost)
 	else if (name == "Hero2")
 	{
 		int attackPoint = 20 + ((level - 1) * 3);
-		float skillPoint = 1.05 + ((level - 1) * 0.01);
-		sprintf(heroInfostr, "Level %d\n공격력 %d(+3)\n스킬\n대공 전문\n%1.2f 배 (+0.01 배 )\n비행 몬스터에게\n데미지 증가", level, attackPoint, skillPoint);
+		float skillPoint = 1.20 + ((level - 1) * 0.05);
+		sprintf(heroInfostr, "Level %d\n공격력 %d(+3)\n스킬\n대공 전문\n%1.2f 배 (+0.05 배 )\n비행 몬스터에게\n데미지 증가", level, attackPoint, skillPoint);
 		if (hero)
 		{
 			pHeroItem2->setOpacity(255.f);
@@ -429,8 +429,8 @@ void HeroStatu::resetHeroInfo(std::string name, bool upgradeinfo, int cost)
 	else if (name == "Hero3")
 	{
 		int attackPoint = 30 + ((level - 1) * 5);
-		float skillPoint = 0.20 + ((level - 1) * 0.02);
-		sprintf(heroInfostr, "Level %d\n공격력 %d(+5)\n스킬\n스플래시 데미지\n%1.2f 배 (+0.02 배 )\n주변 몬스터에게\n스플래시 데미지", level, attackPoint, skillPoint);
+		float skillPoint = 0.50 + ((level - 1) * 0.05);
+		sprintf(heroInfostr, "Level %d\n공격력 %d(+5)\n스킬\n스플래시 데미지\n%1.2f 배 (+0.05 배 )\n주변 몬스터에게\n스플래시 데미지", level, attackPoint, skillPoint);
 		if (hero)
 		{
 			pHeroItem3->setOpacity(255.f);

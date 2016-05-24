@@ -156,6 +156,10 @@ void Menus::doClick(Ref* pSender)
 			auto pScene = MainScene::createScene();
 			Director::getInstance()->replaceScene(pScene);
 		}
+		else if (nowSceneName == "MainScene")
+		{
+			//Device::vibrate(0.5);
+		}
 		else if (nowSceneName == "StageSelectScene")
 		{
 			auto pScene = MainScene::createScene();

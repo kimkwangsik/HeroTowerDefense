@@ -120,12 +120,12 @@ GameStageScene::GameStageScene(int stagelevel)
 
 void GameStageScene::createStage(int stagelevel)
 {
-	char str[20];
-	sprintf(str, "TileMaps/Level%ld.tmx", stagelevel);
+	char str[30];
+	sprintf(str, "TileMaps/Level%d.tmx", stagelevel);
 
 	if (stagelevel == 0)
 	{
-		sprintf(str, "TileMaps/Level%ld.tmx", 1);
+		sprintf(str, "TileMaps/Level%d.tmx", 1);
 	}
 
 	auto skip = MenuItemImage::create(
@@ -810,7 +810,7 @@ void GameStageScene::onTouchEnded(Touch* touch, Event* event)
 				{
 					sprintf(str, "fx_f6_chromaticcold_0%d.png", i);
 				}
-				log("%s", str);
+				//log("%s", str);
 				SpriteFrame* frame = cache->getSpriteFrameByName(str);
 				animFrames.pushBack(frame);
 			}
@@ -948,6 +948,7 @@ void GameStageScene::onTouchEnded(Touch* touch, Event* event)
 				char levelViewstr[10];
 				sprintf(levelViewstr, "%d", obj->towerUpgradeLevel);
 				obj->levelView->setString(levelViewstr);
+				
 				obj->setTexture(str);
 
 				obj->_attackPower *= 1.5;
