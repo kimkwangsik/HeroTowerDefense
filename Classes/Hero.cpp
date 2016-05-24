@@ -145,6 +145,36 @@ void Hero::heroTick(float a)
 						obj->speed->setSpeed(0.0f);
 						obj->setColor(Color3B::GRAY);
 						obj->speedDown = true;
+						auto cache = SpriteFrameCache::getInstance();
+						cache->addSpriteFramesWithFile("Images/Hero/spell/fx_f1_decimate.plist");
+
+						Vector<SpriteFrame*> animFrames;
+
+						char str[100] = { 0 };
+						for (int i = 0; i < 3; i++)
+						{
+							if (i < 10)
+							{
+								sprintf(str, "fx_f1_decimate_00%d.png", i);
+							}
+							else
+							{
+								sprintf(str, "fx_f1_decimate_0%d.png", i);
+							}
+							SpriteFrame* frame = cache->getSpriteFrameByName(str);
+							animFrames.pushBack(frame);
+						}
+						/////////////
+						auto pMan = Sprite::createWithSpriteFrameName("fx_f1_decimate_000.png");
+						//pMan->setScale(1.5f);
+						pMan->setPosition((dis / 1.5) + Vec2((getContentSize().width / 2), (getContentSize().height / 2)));
+						pMan->setAnchorPoint(Vec2(0.5, 0.5));
+						this->addChild(pMan);
+
+						auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+						auto animate = Animate::create(animation);
+						auto seq = Sequence::create(animate, RemoveSelf::create(), nullptr);
+						pMan->runAction(seq);
 					}
 				}
 
@@ -323,7 +353,7 @@ void Hero::heroTick(float a)
 
 				//setVisible(false);
 				magicainMoveVec = nearMonster->getPosition();
-				scheduleOnce(schedule_selector(Hero::magicianMove, this), 1.0f);
+				scheduleOnce(schedule_selector(Hero::magicianMove), 1.0f);
 			}
 		}
 		return;

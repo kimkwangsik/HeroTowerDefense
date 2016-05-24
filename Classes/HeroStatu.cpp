@@ -22,7 +22,6 @@ bool HeroStatu::init()
 
 	touchMenu = false;
 	
-
 	auto pScene = Menus::createScene();
 	auto scenestr = new Menus("HeroStatu");
 	scenestr->autorelease();
@@ -106,7 +105,7 @@ bool HeroStatu::init()
 	auto infoView = LabelTTF::create("상세\n정보", "Arial", 15);
 	infoView->setPosition(Vec2(pHeroInfoView->getContentSize().width / 2,
 		pHeroInfoView->getContentSize().height / 2));
-	infoView->setColor(Color3B::WHITE);
+	infoView->setColor(Color3B::BLACK);
 	pHeroInfoView->addChild(infoView, 2);
 
 	pHeroUpgrade = MenuItemImage::create(
@@ -119,7 +118,7 @@ bool HeroStatu::init()
 	upgrade = LabelTTF::create("강화", "Arial", 15);
 	upgrade->setPosition(Vec2(pHeroUpgrade->getContentSize().width / 2,
 		pHeroUpgrade->getContentSize().height / 2));
-	upgrade->setColor(Color3B::WHITE);
+	upgrade->setColor(Color3B::BLACK);
 	pHeroUpgrade->addChild(upgrade, 2);
 
 	pHeroInfoView->setTag(421);

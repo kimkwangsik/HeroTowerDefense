@@ -431,6 +431,15 @@ void GameStageScene::attackBossMonster(Monster* monster)
 	{
 		auto hrartObj = (Sprite*)_heart.at(_heart.size() - 1);
 		hrartObj->removeFromParent();
+		bool vibon = UserDefault::getInstance()->getBoolForKey("vibration");
+		if (vibon)
+		{
+			Device::vibrate(0.5);
+		}
+		else
+		{
+			log("진동 X");
+		}
 		_heart.popBack();
 	}
 	if (_heart.size() == 0)
@@ -624,6 +633,16 @@ void GameStageScene::onEnter() {
 	log("onEnter()");
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Sound/Music/Hit Them Harder.mp3", true);
+	bool soundon = UserDefault::getInstance()->getBoolForKey("sound");
+	if (soundon)
+	{
+
+	}
+	else
+	{
+		CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	}
+
 	auto listener = EventListenerTouchOneByOne::create();
 
 	listener->setSwallowTouches(true);
@@ -643,6 +662,15 @@ void GameStageScene::onExit() {
 	log("onExit()");
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Sound/Music/Woodland Fantasy.mp3", true);
+	bool soundon = UserDefault::getInstance()->getBoolForKey("sound");
+	if (soundon)
+	{
+
+	}
+	else
+	{
+		CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	}
 	Layer::onExit();
 }
 
