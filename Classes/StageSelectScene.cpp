@@ -103,7 +103,7 @@ TableViewCell* StageSelectScene::tableCellAtIndex(TableView* table, ssize_t idx)
 	auto cell = table->dequeueCell();
 
 	MenuItemImage* pMenuItem;
-
+	
 	if (!cell)
 	{
 		cell = new CustomTableViewCell();
